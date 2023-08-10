@@ -1,0 +1,130 @@
+.movie-card {
+  margin: 0;
+  padding: 0;
+  width: 364px;
+  height: 282px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  background-color: #222222;
+  border-radius: 6px;
+  cursor: pointer;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.08);
+}
+
+.movie-card__container {
+  margin-top: 10px;
+  margin-bottom: 10px;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+  width: calc(100% - 32px);
+}
+
+.movie-card__image {
+  display: block;
+  width: 100%;
+  overflow: hidden;
+  object-fit: cover;
+  border-top-left-radius: 6px;
+  border-top-right-radius: 6px;
+  cursor: pointer;
+}
+
+.movie-card__title {
+  margin: 0;
+  padding: 0;
+  color: #fff;
+  font-size: 13px;
+  font-weight: 500;
+}
+
+.movie-card__title_page_saved-movie {
+  margin-top: 7px;
+  margin-bottom: 8px;
+}
+
+.movie-card__button-like {
+  width: 30px;
+  height: 30px;
+  background-color: #222222;
+  background-image: url("../../images/button-like.svg");
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: 50%;
+  border: none;
+  cursor: pointer;
+  transition: background-size 0.3s linear;
+}
+
+.movie-card__button-like:hover {
+  background-size: 65%;
+}
+
+.movie-card__button-like_active {
+  background-image: url("../../images/button-like-active.svg");
+}
+
+.movie-card__button-remove {
+  display: none;
+}
+
+.movie-card__button-remove_active {
+  display: block;
+  width: 30px;
+  height: 14px;
+  background-color: #222222;
+  background-image: url("../../images/button-remove.svg");
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: 25%;
+  border: none;
+  cursor: pointer;
+  transition: background-size, 0.5s linear;
+}
+
+.movie-card__button-remove_active:hover {
+  background-size: 35%;
+}
+
+.movie-card__subtitle {
+  margin: 0;
+  padding: 0;
+  color: #8b8b8b;
+  font-size: 11px;
+  font-weight: 400;
+  align-self: flex-start;
+  padding-left: 16px;
+}
+
+@media (max-width: 792px) {
+  .movie-card {
+    width: 339px;
+    height: 262px;
+  }
+
+  .movie-card__container {
+    margin-top: 8px;
+    width: calc(100% - 29px);
+  }
+}
+
+@media (max-width: 400px) {
+  .movie-card {
+    width: 300px;
+    height: 237px;
+  }
+
+  .movie-card__title {
+    font-size: 12px;
+  }
+
+  .movie-card__container {
+    margin-bottom: 8px;
+  }
+
+  .movie-card__subtitle {
+    padding-left: 12px;
+  }
+}
