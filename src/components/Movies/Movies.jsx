@@ -18,14 +18,16 @@ function Movies(props) {
   }
 
   return(
-    <main className="movies">
+    <>
       <Header loggedIn={props.loggedIn} openNavigation={toggleNavigation}/> 
-      <SearchForm />
-      <MoviesCardList dataMovies={props.dataMovies} user={props.user}/>
-      <Preloader isPreloaderOpen={isPreloaderOpen} />
+      <main className="movies">
+        <SearchForm />
+        <MoviesCardList dataMovies={props.dataMovies} user={props.user}/>
+        <Preloader isPreloaderOpen={isPreloaderOpen} />
+      </main>
       <Navigation isNavigationOpen={isNavigationOpen} setIsNavigationOpen={setIsNavigationOpen} closeNavigation={toggleNavigation} />
       <Footer />
-    </main>
+    </>
   )
 }
 

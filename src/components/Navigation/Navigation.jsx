@@ -19,7 +19,7 @@ function Navigation(props) {
           <Link className={location.pathname === "/saved-movies" ? "navigation__link navigation__link_active" : "navigation__link"} to="/saved-movies">Сохранённые фильмы</Link>
         </div>
         <Link to="/profile" className='navigation__account-link'>Аккаунт
-            <div className='header__account-image'></div>
+            <div className='account-icon'></div>
         </Link>
       </div>
     </nav>

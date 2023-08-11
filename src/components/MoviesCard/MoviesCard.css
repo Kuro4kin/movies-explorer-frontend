@@ -38,6 +38,9 @@
   color: #fff;
   font-size: 13px;
   font-weight: 500;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
 }
 
 .movie-card__title_page_saved-movie {
@@ -98,7 +101,7 @@
   padding-left: 16px;
 }
 
-@media (max-width: 792px) {
+@media (max-width: 1024px) {
   .movie-card {
     width: 339px;
     height: 262px;

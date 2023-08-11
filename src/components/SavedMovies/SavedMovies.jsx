@@ -20,13 +20,15 @@ function SavedMovies(props) {
 
   
   return(
-    <main className="saved-movies">
+    <>
       <Header loggedIn={props.loggedIn} openNavigation={toggleNavigation}/> 
-      <SearchForm />
-      <MoviesCardList dataMovies={props.dataMovies} user={props.user} />
+      <main className="saved-movies">
+        <SearchForm />
+        <MoviesCardList dataMovies={props.dataMovies} user={props.user} />
+      </main>
       <Navigation isNavigationOpen={isNavigationOpen} setIsNavigationOpen={setIsNavigationOpen} closeNavigation={toggleNavigation}/>
       <Footer />
-    </main>
+    </>
   )
 }
 

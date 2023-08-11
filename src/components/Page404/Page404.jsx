@@ -3,11 +3,11 @@ import "./Page404.css"
 
 function Page404() {
   return (
-    <div className="page404">
+    <section className="page404">
       <h2 className="page404__title">404</h2>
       <p className="page404__descritpion">Страница не найдена </p>
       <Link to="/" className="page404__link">Назад</Link>
-    </div>
+    </section>
   )
 }
 

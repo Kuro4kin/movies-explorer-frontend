@@ -3,7 +3,7 @@
   padding: 18px 70px 0 70px;
 }
 
-.header__container {
+.header-container {
   width: calc(100% - 140px);
   height: 38px;
   display: flex;
@@ -109,7 +109,7 @@
   opacity: 70%;
 }
 
-.header__account-image {
+.account-icon {
   margin-right: 3px;
   width: 26px;
   height: 26px;

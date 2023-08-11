@@ -18,22 +18,24 @@ function Main(props) {
   };
 
   return (
-    <main className="main">
-      <div className="main__header-container">
+    <>
+      <div className="wrapper-header">
         <Header loggedIn={props.loggedIn} openNavigation={toggleNavigation} />
       </div>
-      <Promo />
-      <NavTab />
-      <AboutProject />
-      <Techs />
-      <AboutMe />
+      <main className="main">
+        <Promo />
+        <NavTab />
+        <AboutProject />
+        <Techs />
+        <AboutMe />
+      </main>
       <Navigation
         isNavigationOpen={isNavigationOpen}
         setIsNavigationOpen={setIsNavigationOpen}
         closeNavigation={toggleNavigation}
       />
       <Footer />
-    </main>
+    </>
   );
 }
 

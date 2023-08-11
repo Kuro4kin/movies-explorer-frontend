@@ -46,7 +46,7 @@ function AboutMe() {
           </li>
           <li className="author-info__portfolio-item">
             <a
-              href="https://github.com/Kuro4kin/mesto-react"
+              href="https://github.com/Kuro4kin/express-mesto-gha"
               target="_blank"
               rel="noreferrer"
               className="author-info__portfolio-link">

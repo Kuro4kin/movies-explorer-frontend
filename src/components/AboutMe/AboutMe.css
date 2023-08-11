@@ -149,7 +149,7 @@
 
 @media (max-width: 792px) {
   .author-info {
-    padding: 79px 50.5px 90px 50px;
+    padding: 79px 50.5px 103px 50px;
   }
 
   .author-info__row {
@@ -205,7 +205,7 @@
 
 @media (max-width: 410px) {
   .author-info {
-    padding: 57px 15px 90px 14px;
+    padding: 57px 15px 104px 14px;
   }
 
   .author-info__row {

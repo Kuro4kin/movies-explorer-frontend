@@ -7,7 +7,7 @@ function Header(props) {
   const headerNavbarClassName = `header__navbar ${props.loggedIn && "header__navbar_login"}`;
 
   return (
-    <header className="header header__container">
+    <header className="header header-container">
       <Logo />
       <ul className={headerNavbarClassName}>
         {props.loggedIn && (
@@ -40,7 +40,7 @@ function Header(props) {
         <>
           <Link to="/profile" className="header__account-link">
             Аккаунт
-            <div className="header__account-image"></div>
+            <div className="account-icon"></div>
           </Link>
           <button className="header__button-menu" onClick={props.openNavigation}>
             <span className="header__navicon-line"></span>
