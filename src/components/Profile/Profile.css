@@ -1,0 +1,162 @@
+.profile {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  min-height: 100vh;
+}
+
+.profile__title {
+  margin-top: 92px;
+  color: #fff;
+  font-weight: 500;
+  font-size: 24px;
+}
+
+.profile__name-container {
+  margin-top: 95px;
+  width: 410px;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  border-bottom: 1px solid #424242;
+  padding-bottom: 5px;
+}
+
+.profile__form {
+  min-height: 386px;
+  display: flex;
+  flex-direction: column;
+}
+
+.profile__note {
+  color: #fff;
+  font-weight: 500;
+  font-size: 11px;
+}
+
+.profile__input {
+  color: #fff;
+  border: none;
+  text-align: right;
+  font-weight: 400;
+  font-size: 11px;
+  background-color: #202020;
+}
+
+.profile__input:disabled {
+  color: #000;
+  background-color: #202020;
+  border: none;
+  text-align: right;
+  font-weight: 400;
+  font-size: 11px;
+}
+
+.profile__input::-webkit-input-placeholder {
+  color: #fff;
+}
+
+.profile__input::-moz-placeholder {
+  color: #fff;
+}
+
+.profile__mail-container {
+  margin-top: 8px;
+  width: 410px;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+}
+
+.profile__span-error {
+  margin-top: 177px;
+  margin-bottom: 20px;
+  min-height: 14px;
+  color: #ff404c;
+  font-weight: 400;
+  font-size: 11px;
+}
+
+.profile__button-edit {
+  background-color: #202020;
+  border: none;
+  color: #fff;
+  font-size: 13px;
+  font-weight: 400;
+  cursor: pointer;
+  transition: opacity 0.5s linear;
+}
+
+.profile__button-edit:hover {
+  opacity: 80%;
+}
+
+.profile__link-unlogin {
+  margin-top: 15px;
+  margin-bottom: 70px;
+  background-color: #202020;
+  border: none;
+  color: #ee3465;
+  text-decoration: none;
+  font-size: 13px;
+  font-weight: 500;
+  transition: opacity 0.5s linear;
+}
+
+.profile__link-unlogin:hover {
+  opacity: 80%;
+}
+
+@media (max-width: 792px) {
+  .profile__title {
+    margin-top: 254px;
+  }
+
+  .profile__name-container {
+    margin-top: 68px;
+  }
+
+  .profile__form {
+    min-height: 349px;
+  }
+
+  .profile__span-error {
+    margin-top: 166px;
+  }
+
+  .profile__link-unlogin {
+    margin-bottom: 269px;
+  }
+}
+
+@media (max-width: 420px) {
+  .profile__title {
+    margin-top: 89px;
+  }
+
+  .profile__name-container {
+    margin-top: 50px;
+    width: 260px;
+  }
+
+  .profile__mail-container {
+    width: 260px;
+  }
+
+  .profile__form {
+    min-height: 501px;
+  }
+
+  .profile__span-error {
+    margin-top: 335px;
+  }
+
+  .profile__button-edit {
+    font-size: 12px;
+  }
+
+  .profile__link-unlogin {
+    margin-bottom: 40px;
+    font-size: 12px;
+  }
+}
