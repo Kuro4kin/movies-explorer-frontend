@@ -16,7 +16,7 @@ function AboutMe() {
               готовлюсь к этому: прошёл курс по веб-разработке, работаю над pet-проектами для портфолио,
               стажируюсь🙃коплю ману, качаю скиллы...
             </p>
-            <a class="author-info__gh-link" href="https://github.com/Kuro4kin" target="_blank" rel="noreferrer">
+            <a className="author-info__gh-link" href="https://github.com/Kuro4kin" target="_blank" rel="noreferrer">
               Github
             </a>
           </div>

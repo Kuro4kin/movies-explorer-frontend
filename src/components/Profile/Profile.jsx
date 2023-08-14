@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { Link } from "react-router-dom";
+import { useForm } from "react-hook-form";
 import Header from "../Header/Header";
 import Navigation from "../Navigation/Navigation";
 import ButtonSubmit from "../ButtonSubmit/ButtonSubmit";
@@ -7,8 +8,16 @@ import ButtonSubmit from "../ButtonSubmit/ButtonSubmit";
 import "./Profile.css";
 
 function Profile({ loggedIn, user }) {
+  const {
+    register,
+    formState: { isValid, errors },
+  } = useForm({ mode: "onChange", defaultValues: {userName: user.name, userEmail: user.mail} });
   const [isEditability, setIsEditability] = useState(false);
   const [isNavigationOpen, setIsNavigationOpen] = useState(false);
+  const [formValue, setFormValue] = useState({
+    name: user.name,
+    email: user.mail,
+  });
 
   const toggleNavigation = () => {
     setIsNavigationOpen(!isNavigationOpen);
@@ -18,7 +27,9 @@ function Profile({ loggedIn, user }) {
     setIsEditability(true);
   };
 
-  const onClickButtonSave = () => {
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    console.log(formValue);
     setIsEditability(false);
   };
 
@@ -27,24 +38,47 @@ function Profile({ loggedIn, user }) {
       <Header loggedIn={loggedIn} openNavigation={toggleNavigation} />
       <main className="profile">
         <h2 className="profile__title">Привет, {user.name}!</h2>
-        <form className="profile__form">
+        <form className="profile__form" onSubmit={handleSubmit}>
           <div className="profile__name-container">
             <p className="profile__note">Имя</p>
-            <input required disabled={!isEditability} className="profile__input" placeholder={user.name}></input>
+            <input
+              disabled={!isEditability}
+              className="profile__input"
+/*               placeholder={user.name} */
+              {...register("userName", {
+                required: "Это поле обязательно для заполнения",
+                minLength: { value: 2, message: "Минимальное количество символов: 2" },
+                maxLength: 30,
+                pattern: { value: /^[a-zA-Zа-яёА-ЯЁ][a-zA-Zа-яёА-ЯЁ\-\s]{1,30}$/, message: "Не допустимые символы" },
+                onChange: (e) => {
+                  formValue.name = e.target.value;
+                },
+              })}></input>
           </div>
+          <span className="profile__input-span">{errors.userName && errors.userName.message}</span>
           <div className="profile__mail-container">
             <p className="profile__note">E-mail</p>
-            <input
-              required
-              disabled={!isEditability}
-              type="mail"
-              className="profile__input"
-              placeholder={user.mail}></input>
+            <input 
+              disabled={!isEditability} 
+              type="mail" 
+              className="profile__input" 
+/*               placeholder={user.mail} */
+              {...register("userEmail", {
+                required: "Это поле обязательно для заполнения",
+                pattern: {
+                value: /\S+@\S+\.\S+/,
+                message: "Введите корректный адрес электронной почты",
+               },
+                onChange: (e) => {
+                  formValue.email = e.target.value;
+                },
+              })}></input>
           </div>
+          <span className="profile__input-span">{errors.userEmail && errors.userEmail.message}</span>
           {isEditability && (
             <>
               <span className="profile__span-error"></span>
-              <ButtonSubmit text="Сохранить" onClickButtonSave={onClickButtonSave} />
+              <ButtonSubmit text="Сохранить" disabled={!isValid}/>
             </>
           )}
         </form>
@@ -53,7 +87,9 @@ function Profile({ loggedIn, user }) {
             <button className="profile__button-edit" onClick={handleClickEditButton}>
               Редактировать
             </button>
-            <Link className="profile__link-unlogin" to="/signin">Выйти из аккаунта</Link>
+            <Link className="profile__link-unlogin" to="/signin">
+              Выйти из аккаунта
+            </Link>
           </>
         )}
       </main>

@@ -18,14 +18,14 @@
 }
 
 .register__form {
-  margin-top: 31px;
+  margin-top: 40px;
   margin-bottom: 17px;
 }
 
 .register__label {
   display: flex;
   flex-direction: column;
-  margin: 10px 0 11px 0;
+  margin: 0 0 6px 0;
   padding: 0;
   font-size: 10px;
   font-weight: 400;
@@ -33,7 +33,7 @@
 }
 
 .register__label:last-of-type {
-  margin: 0 0 80px 0;
+  margin: 0 0 74px 0;
 }
 
 .register__input {
@@ -54,7 +54,9 @@
 }
 
 .register__input-span {
+  margin-top: 5px;
   min-height: 10px;
+  color: #EE3465;
   font-size: 10px;
   font-weight: 400;
   line-height: 10px;
@@ -103,13 +105,13 @@
   }
 
   .register__form {
-    margin-top: 71px;
+    margin-top: 81px;
     margin-bottom: 14px; 
     width: 100%;
   }
 
   .register__label:last-of-type {
-    margin: 0 0 168px 0;
+    margin: 0 0 162px 0;
   }
 
   .register__question {
