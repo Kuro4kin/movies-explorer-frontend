@@ -1,22 +1,26 @@
-import { useState } from "react";
+import { useState, useContext } from "react";
 import { Link } from "react-router-dom";
 import { useForm } from "react-hook-form";
 import Header from "../Header/Header";
 import Navigation from "../Navigation/Navigation";
 import ButtonSubmit from "../ButtonSubmit/ButtonSubmit";
-
+import { CurrentUserContext } from "../../contexts/CurrentUserContext";
+import { unlogin } from "../../utils/MainApi";
 import "./Profile.css";
 
-function Profile({ loggedIn, user }) {
+
+function Profile({ loggedIn, user, handleUnlogin }) {
+  const currentUser = useContext(CurrentUserContext);
   const {
     register,
     formState: { isValid, errors },
-  } = useForm({ mode: "onChange", defaultValues: {userName: user.name, userEmail: user.mail} });
+  } = useForm({ mode: "onChange", defaultValues: {userName: currentUser.name, userEmail: currentUser.email} });
+
   const [isEditability, setIsEditability] = useState(false);
   const [isNavigationOpen, setIsNavigationOpen] = useState(false);
   const [formValue, setFormValue] = useState({
-    name: user.name,
-    email: user.mail,
+    name: currentUser.name,
+    email: currentUser.email,
   });
 
   const toggleNavigation = () => {
@@ -33,11 +37,17 @@ function Profile({ loggedIn, user }) {
     setIsEditability(false);
   };
 
+  const handleClickSignOutLink = () => {
+    unlogin()
+      .then(() => handleUnlogin())
+      .catch((err) => console.log(err))
+  }
+
   return (
     <>
       <Header loggedIn={loggedIn} openNavigation={toggleNavigation} />
       <main className="profile">
-        <h2 className="profile__title">Привет, {user.name}!</h2>
+        <h2 className="profile__title">Привет, {currentUser.name}!</h2>
         <form className="profile__form" onSubmit={handleSubmit}>
           <div className="profile__name-container">
             <p className="profile__note">Имя</p>
@@ -87,7 +97,7 @@ function Profile({ loggedIn, user }) {
             <button className="profile__button-edit" onClick={handleClickEditButton}>
               Редактировать
             </button>
-            <Link className="profile__link-unlogin" to="/signin">
+            <Link className="profile__link-unlogin" to="/signin" onClick={handleClickSignOutLink}>
               Выйти из аккаунта
             </Link>
           </>

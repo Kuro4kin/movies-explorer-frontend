@@ -3,23 +3,28 @@ import { Link, useNavigate } from "react-router-dom";
 import { useForm } from "react-hook-form";
 import ButtonSubmit from "../ButtonSubmit/ButtonSubmit";
 import Logo from "../Logo/Logo";
+import { createNewUser } from "../../utils/MainApi";
 import "./Register.css";
 
 function Register() {
-  const { register, formState: { isValid, errors }  } = useForm({ mode: "onChange" });
   const [formValue, setFormValue] = useState({
-    name: "",
     email: "",
     password: "",
+    name: "",
   });
 
+  const { register, formState: { isValid, errors }  } = useForm({ mode: "onChange" });
   const navigate = useNavigate()
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    console.log(formValue)
-    navigate('/signin', { replace: true })
-  }
+    createNewUser(formValue)
+      .then((res) => {
+        console.log(res);
+        navigate('/signin', { replace: true });
+      })
+      .catch((err) => console.log(err))
+  };
 
   return (
     <section className="register section-register">
@@ -72,6 +77,7 @@ function Register() {
             })}/>
           <span className="register__input-span">{errors.userPassword && errors.userPassword.message}</span>
         </label>
+        <span className="regester__api-error-span">{}</span>
         <ButtonSubmit text="Зарегистрироваться" disabled={!isValid} />
       </form>
       <p className="register__question">

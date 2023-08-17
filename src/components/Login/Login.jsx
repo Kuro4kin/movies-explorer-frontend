@@ -3,12 +3,12 @@ import { Link, useNavigate } from "react-router-dom";
 import { useForm } from "react-hook-form";
 import ButtonSubmit from "../ButtonSubmit/ButtonSubmit";
 import Logo from "../Logo/Logo";
+import { login } from "../../utils/MainApi";
 import "./Login.css";
 
-function Login() {
+function Login({ handleLogin }) {
   const { register, formState: { isValid, errors }  } = useForm({ mode: "onChange" });
   const [formValue, setFormValue] = useState({
-    name: "",
     email: "",
     password: "",
   });
@@ -17,8 +17,14 @@ function Login() {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    console.log(formValue)
-    navigate('/movies', { replace: true })
+    login(formValue)
+      .then((res) => {
+        handleLogin();
+        navigate('/movies', { replace: true })
+      })
+      .catch((err) => {
+        console.log(err);
+      })
   }
 
   return (

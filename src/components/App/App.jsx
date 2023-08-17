@@ -1,33 +1,63 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Routes, Route } from "react-router-dom";
+import { CurrentUserContext } from "../../contexts/CurrentUserContext.js";
 import Main from "../Main/Main.jsx";
+import ProtectedRouteElement from "../ProtectedRoute/ProtectedRoute.jsx";
 import Movies from "../Movies/Movies.jsx";
 import SavedMovies from "../SavedMovies/SavedMovies.jsx";
 import Profile from "../Profile/Profile.jsx";
 import Login from "../Login/Login.jsx";
 import Register from "../Register/Register.jsx";
 import Page404 from "../Page404/Page404.jsx";
-import  imageWordsAboutDesign from "../../images/movie-card-photo.jpg";
-import  imageFilmAlmanac  from "../../images/movie-card-photo1.jpg";
-import  imageInPursuitBanksy from "../../images/movie-card-photo2.jpg";
-import  imageBasquiat from "../../images/movie-card-photo3.jpg";
-import  imageRunningIsFreedom from "../../images/movie-card-photo4.jpg";
-import  imageBooksellers from "../../images/movie-card-photo5.jpg";
-import  imageWhenIThink  from "../../images/movie-card-photo6.jpg";
-import  imageGimmeDanger from "../../images/movie-card-photo7.jpg";
-import  imageJanice from "../../images/movie-card-photo8.jpg";
-import  imageGatherBeforeJump from "../../images/movie-card-photo9.jpg";
-import  imagePJHarvey from "../../images/movie-card-photo10.jpg";
-import  imageOnTheWaves from "../../images/movie-card-photo11.jpg";
+import { checkToken, getMyMovies } from "../../utils/MainApi.js";
+import imageWordsAboutDesign from "../../images/movie-card-photo.jpg";
+import imageFilmAlmanac from "../../images/movie-card-photo1.jpg";
+import imageInPursuitBanksy from "../../images/movie-card-photo2.jpg";
+import imageBasquiat from "../../images/movie-card-photo3.jpg";
+import imageRunningIsFreedom from "../../images/movie-card-photo4.jpg";
+import imageBooksellers from "../../images/movie-card-photo5.jpg";
+import imageWhenIThink from "../../images/movie-card-photo6.jpg";
+import imageGimmeDanger from "../../images/movie-card-photo7.jpg";
+import imageJanice from "../../images/movie-card-photo8.jpg";
+import imageGatherBeforeJump from "../../images/movie-card-photo9.jpg";
+import imagePJHarvey from "../../images/movie-card-photo10.jpg";
+import imageOnTheWaves from "../../images/movie-card-photo11.jpg";
 import "./App.css";
 
-
 function App() {
-  const [loggedIn, setLoggedIn] = useState(true);
+  const [loggedIn, setLoggedIn] = useState(false);
+  const [currentUser, setCurrentUser] = useState({});
+  const [userMovies, setUserMovies] = useState([]);
+
+  useEffect(() => {
+    checkToken()
+      .then((res) => {
+        setLoggedIn(true);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
+    useEffect(() => {
+    if (loggedIn) {
+      Promise.all([checkToken(), getMyMovies()])
+        .then(([userInfo, moviesInfo]) => {
+          setCurrentUser(userInfo);
+
+          setUserMovies(moviesInfo)
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+    }
+  }, [loggedIn]);
+
   const user = {
     name: "Виталий",
     mail: "examle@example.ru",
-    id: "HiWv9gBCDJOT6TCXyyFHQe4E4TIetKkf"
+    id: "HiWv9gBCDJOT6TCXyyFHQe4E4TIetKkf",
   };
 
   const dataMyMovies = [
@@ -44,7 +74,7 @@ function App() {
       duration: 63,
       owner: "HiWv9gBCDJOT6TCXyyFHQe4E4TIetKkf",
       likes: [],
-    },    
+    },
     {
       image: imageInPursuitBanksy,
       nameRU: "В погоне за Бенкси",
@@ -52,7 +82,7 @@ function App() {
       owner: "HiWv9gBCDJOT6TCXyyFHQe4E4TIetKkf",
       likes: [],
     },
-  ]
+  ];
 
   const dataMovies = [
     {
@@ -68,7 +98,7 @@ function App() {
       duration: 63,
       owner: "HiWv9gBCD6OT6TCXyyFHQe4E4TIetKkf",
       likes: [],
-    },    
+    },
     {
       image: imageInPursuitBanksy,
       nameRU: "В погоне за Бенкси",
@@ -82,8 +112,8 @@ function App() {
       duration: 81,
       owner: "HiWv9gBCD3OT6TCXyyFHQe4E4TIetKkf",
       likes: [],
-    },    
-    {      
+    },
+    {
       image: imageRunningIsFreedom,
       nameRU: "Бег это свобода",
       duration: 104,
@@ -139,22 +169,53 @@ function App() {
       owner: "HiW4gBCDJOT6TCXyyFHQe4E4TIetKkf",
       likes: [],
     },
-  ]
+  ];
+
+  function handleLogin() {
+    setLoggedIn(true);
+  }
+
+  const handleUnlogin = () => {
+    setLoggedIn(false);
+  };
 
   return (
-    <div className="root">
-      <div className="page-wrapper">
-        <Routes>
-          <Route path="/" element={<Main loggedIn={loggedIn} />}></Route>
-          <Route path="/movies" element={<Movies dataMovies={dataMovies} user={user} loggedIn={loggedIn} />}></Route>
-          <Route path="/saved-movies" element={<SavedMovies dataMovies={dataMyMovies} user={user} loggedIn={loggedIn} />}></Route>
-          <Route path="/profile" element={<Profile loggedIn={loggedIn} user={user} />}></Route>
-          <Route path="/signin" element={<Login />}></Route>
-          <Route path="/signup" element={<Register />}></Route>
-          <Route path="/*" element={<Page404 />}></Route>
-        </Routes>
+    <CurrentUserContext.Provider value={currentUser}>
+      <div className="root">
+        <div className="page-wrapper">
+          <Routes>
+            <Route path="/" element={<Main loggedIn={loggedIn} />}></Route>
+            <Route
+              path="/movies"
+              element={
+                <ProtectedRouteElement
+                  loggedIn={loggedIn}
+                  element={(props) => <Movies dataMovies={dataMovies} user={user} loggedIn={loggedIn} />}
+                />
+              }></Route>
+            <Route
+              path="/saved-movies"
+              element={
+                <ProtectedRouteElement
+                  loggedIn={loggedIn}
+                  element={(props) => <SavedMovies dataMovies={dataMyMovies} user={user} loggedIn={loggedIn} />}
+                />
+              }></Route>
+            <Route
+              path="/profile"
+              element={
+                <ProtectedRouteElement
+                  loggedIn={loggedIn}
+                  element={(props) => <Profile user={user} loggedIn={loggedIn} handleUnlogin={handleUnlogin} />}
+                />
+              }></Route>
+            <Route path="/signin" element={<Login handleLogin={handleLogin} />}></Route>
+            <Route path="/signup" element={<Register />}></Route>
+            <Route path="/*" element={<Page404 />}></Route>
+          </Routes>
+        </div>
       </div>
-    </div>
+    </CurrentUserContext.Provider>
   );
 }
 

@@ -13,7 +13,7 @@ import "./SavedMovies.css";
 function SavedMovies(props) {
   const [isNavigationOpen, setIsNavigationOpen] = useState(false);
   const [isPreloaderOpen, setIsPreloaderOpen] = useState(false);
-  
+
   const toggleNavigation = () => {
     setIsNavigationOpen(!isNavigationOpen)
   }
