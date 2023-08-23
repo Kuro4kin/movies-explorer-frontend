@@ -2,3 +2,10 @@
   display: flex;
   flex-direction: column;
 }
+
+.movies__span {
+  margin: 25px auto;
+  color: #fff;
+  font-size: 13px;
+  font-weight: 400;
+}

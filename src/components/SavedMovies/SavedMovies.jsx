@@ -14,7 +14,11 @@ function SavedMovies(props) {
   const [isNavigationOpen, setIsNavigationOpen] = useState(false);
   const [isPreloaderOpen, setIsPreloaderOpen] = useState(false);
 
-  const toggleNavigation = () => {
+  function handleRemoveSavedMovie(movieId) {
+    props.handleRemoveSavedMovie(movieId)
+  }
+
+  function toggleNavigation() {
     setIsNavigationOpen(!isNavigationOpen)
   }
 
@@ -24,7 +28,7 @@ function SavedMovies(props) {
       <Header loggedIn={props.loggedIn} openNavigation={toggleNavigation}/> 
       <main className="saved-movies">
         <SearchForm />
-        <MoviesCardList dataMovies={props.dataMovies} user={props.user} />
+        <MoviesCardList dataMovies={props.dataMovies} handleRemoveSavedMovie={handleRemoveSavedMovie}/>
       </main>
       <Navigation isNavigationOpen={isNavigationOpen} setIsNavigationOpen={setIsNavigationOpen} closeNavigation={toggleNavigation}/>
       <Footer />

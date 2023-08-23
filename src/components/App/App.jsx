@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { Routes, Route } from "react-router-dom";
+import { Routes, Route, useNavigate, useLocation } from "react-router-dom";
 import { CurrentUserContext } from "../../contexts/CurrentUserContext.js";
 import Main from "../Main/Main.jsx";
 import ProtectedRouteElement from "../ProtectedRoute/ProtectedRoute.jsx";
@@ -9,44 +9,32 @@ import Profile from "../Profile/Profile.jsx";
 import Login from "../Login/Login.jsx";
 import Register from "../Register/Register.jsx";
 import Page404 from "../Page404/Page404.jsx";
-import { checkToken, getMyMovies } from "../../utils/MainApi.js";
-import imageWordsAboutDesign from "../../images/movie-card-photo.jpg";
-import imageFilmAlmanac from "../../images/movie-card-photo1.jpg";
-import imageInPursuitBanksy from "../../images/movie-card-photo2.jpg";
-import imageBasquiat from "../../images/movie-card-photo3.jpg";
-import imageRunningIsFreedom from "../../images/movie-card-photo4.jpg";
-import imageBooksellers from "../../images/movie-card-photo5.jpg";
-import imageWhenIThink from "../../images/movie-card-photo6.jpg";
-import imageGimmeDanger from "../../images/movie-card-photo7.jpg";
-import imageJanice from "../../images/movie-card-photo8.jpg";
-import imageGatherBeforeJump from "../../images/movie-card-photo9.jpg";
-import imagePJHarvey from "../../images/movie-card-photo10.jpg";
-import imageOnTheWaves from "../../images/movie-card-photo11.jpg";
+import { checkUser, getMyMovies } from "../../utils/MainApi.js";
 import "./App.css";
 
 function App() {
   const [loggedIn, setLoggedIn] = useState(false);
   const [currentUser, setCurrentUser] = useState({});
   const [userMovies, setUserMovies] = useState([]);
+  const [errCode, setErrCode] = useState(null)
+  const navigate = useNavigate();
+  const location = useLocation();
 
   useEffect(() => {
-    checkToken()
-      .then((res) => {
-        setLoggedIn(true);
-      })
-      .catch((err) => {
-        console.log(err);
-      });
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+    checkUser()
+      .then(() =>{
+         setLoggedIn(true);
+         navigate(location.pathname, {replace:true})
+        })
+      .catch((err) => console.log(err));
   }, []);
 
-    useEffect(() => {
+  useEffect(() => {
     if (loggedIn) {
-      Promise.all([checkToken(), getMyMovies()])
-        .then(([userInfo, moviesInfo]) => {
+      Promise.all([checkUser(), getMyMovies()])
+        .then(([userInfo, myMoviesInfo]) => {
           setCurrentUser(userInfo);
-
-          setUserMovies(moviesInfo)
+          setUserMovies(myMoviesInfo);
         })
         .catch((err) => {
           console.log(err);
@@ -54,130 +42,31 @@ function App() {
     }
   }, [loggedIn]);
 
-  const user = {
-    name: "Виталий",
-    mail: "examle@example.ru",
-    id: "HiWv9gBCDJOT6TCXyyFHQe4E4TIetKkf",
-  };
+  function handleSaveMovie(data) {
+    setUserMovies([data, ...userMovies]);
+  }
 
-  const dataMyMovies = [
-    {
-      image: imageWordsAboutDesign,
-      nameRU: "33 слова о дизайне",
-      duration: 107,
-      owner: "HiWv9gBCDJOT6TCXyyFHQe4E4TIetKkf",
-      likes: [],
-    },
-    {
-      image: imageFilmAlmanac,
-      nameRU: "Киноальманах «100 лет дизайна»",
-      duration: 63,
-      owner: "HiWv9gBCDJOT6TCXyyFHQe4E4TIetKkf",
-      likes: [],
-    },
-    {
-      image: imageInPursuitBanksy,
-      nameRU: "В погоне за Бенкси",
-      duration: 102,
-      owner: "HiWv9gBCDJOT6TCXyyFHQe4E4TIetKkf",
-      likes: [],
-    },
-  ];
-
-  const dataMovies = [
-    {
-      image: imageWordsAboutDesign,
-      nameRU: "33 слова о дизайне",
-      duration: 107,
-      owner: "HiWv9gBCD6OT6TCXyyFHQe4E4TIetKkf",
-      likes: ["HiWv9gBCDJOT6TCXyyFHQe4E4TIetKkf"],
-    },
-    {
-      image: imageFilmAlmanac,
-      nameRU: "Киноальманах «100 лет дизайна»",
-      duration: 63,
-      owner: "HiWv9gBCD6OT6TCXyyFHQe4E4TIetKkf",
-      likes: [],
-    },
-    {
-      image: imageInPursuitBanksy,
-      nameRU: "В погоне за Бенкси",
-      duration: 102,
-      owner: "HiWv9gBCD4OT6TCXyyFHQe4E4TIetKkf",
-      likes: [],
-    },
-    {
-      image: imageBasquiat,
-      nameRU: "Баския: Взрыв реальности",
-      duration: 81,
-      owner: "HiWv9gBCD3OT6TCXyyFHQe4E4TIetKkf",
-      likes: [],
-    },
-    {
-      image: imageRunningIsFreedom,
-      nameRU: "Бег это свобода",
-      duration: 104,
-      owner: "HiWv9gBCD3OT6TCXyyFHQe4E4TIetKkf",
-      likes: [],
-    },
-    {
-      image: imageBooksellers,
-      nameRU: "Книготорговцы",
-      duration: 97,
-      owner: "HiWv9gBC44OT6TCXyyFHQe4E4TIetKkf",
-      likes: ["HiWv9gBCDJOT6TCXyyFHQe4E4TIetKkf"],
-    },
-    {
-      image: imageWhenIThink,
-      nameRU: "Когда я думаю о Германии ночью",
-      duration: 116,
-      owner: "HiWv9gBC55OT6TCXyyFHQe4E4TIetKkf",
-      likes: [],
-    },
-    {
-      image: imageGimmeDanger,
-      nameRU: "Gimme Danger: История Игги и The Stooge...",
-      duration: 119,
-      owner: "HiWv9gBC5OT6TCXyyFHQe4E4TIetKkf",
-      likes: [],
-    },
-    {
-      image: imageJanice,
-      nameRU: "Дженис: Маленькая девочка грустит",
-      duration: 102,
-      owner: "HiWv9gB5JOT6TCXyyFHQe4E4TIetKkf",
-      likes: ["HiWv9gBCDJOT6TCXyyFHQe4E4TIetKkf"],
-    },
-    {
-      image: imageGatherBeforeJump,
-      nameRU: "Соберись перед прыжком",
-      duration: 70,
-      owner: "HiWv9g4DJOT6TCXyyFHQe4E4TIetKkf",
-      likes: ["HiWv9gBCDJOT6TCXyyFHQe4E4TIetKkf"],
-    },
-    {
-      image: imagePJHarvey,
-      nameRU: "Пи Джей Харви: A dog called money",
-      duration: 64,
-      owner: "HiWv9CDJOT6TCXyyFHQe4E4TIetKkf",
-      likes: [],
-    },
-    {
-      image: imageOnTheWaves,
-      nameRU: "По волнам: Искусство звука в кино",
-      duration: 67,
-      owner: "HiW4gBCDJOT6TCXyyFHQe4E4TIetKkf",
-      likes: [],
-    },
-  ];
+  function handleRemoveSavedMovie(movieId) {
+    setUserMovies(userMovies.filter((i) => i._id !== movieId));
+  }
 
   function handleLogin() {
     setLoggedIn(true);
   }
 
-  const handleUnlogin = () => {
+  function handleUnlogin() {
+    localStorage.removeItem("keyWordValue");
+    localStorage.removeItem("renderMovies");
+    localStorage.removeItem("stateButtonAdd");
+    localStorage.removeItem("filterMovies");
+    localStorage.removeItem("onlyShortFilms");
     setLoggedIn(false);
-  };
+    navigate("/");
+  }
+
+  function handleUpdateUserInfo(data) {
+    setCurrentUser(data);
+  }
 
   return (
     <CurrentUserContext.Provider value={currentUser}>
@@ -190,7 +79,14 @@ function App() {
               element={
                 <ProtectedRouteElement
                   loggedIn={loggedIn}
-                  element={(props) => <Movies dataMovies={dataMovies} user={user} loggedIn={loggedIn} />}
+                  element={(props) => (
+                    <Movies
+                      loggedIn={loggedIn}
+                      userMovies={userMovies}
+                      handleSaveMovie={handleSaveMovie}
+                      handleRemoveSavedMovie={handleRemoveSavedMovie}
+                    />
+                  )}
                 />
               }></Route>
             <Route
@@ -198,7 +94,7 @@ function App() {
               element={
                 <ProtectedRouteElement
                   loggedIn={loggedIn}
-                  element={(props) => <SavedMovies dataMovies={dataMyMovies} user={user} loggedIn={loggedIn} />}
+                  element={(props) => <SavedMovies dataMovies={userMovies} loggedIn={loggedIn} handleRemoveSavedMovie={handleRemoveSavedMovie}/>}
                 />
               }></Route>
             <Route
@@ -206,7 +102,14 @@ function App() {
               element={
                 <ProtectedRouteElement
                   loggedIn={loggedIn}
-                  element={(props) => <Profile user={user} loggedIn={loggedIn} handleUnlogin={handleUnlogin} />}
+                  element={(props) => (
+                    <Profile
+                      loggedIn={loggedIn}
+                      handleUnlogin={handleUnlogin}
+                      handleUpdateUserInfo={handleUpdateUserInfo}
+                      errCode={errCode}
+                    />
+                  )}
                 />
               }></Route>
             <Route path="/signin" element={<Login handleLogin={handleLogin} />}></Route>

@@ -1,40 +1,36 @@
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { useForm } from "react-hook-form";
+import Error from "../Error/Error";
 import ButtonSubmit from "../ButtonSubmit/ButtonSubmit";
 import Logo from "../Logo/Logo";
 import { createNewUser } from "../../utils/MainApi";
 import "./Register.css";
 
 function Register() {
-  const [formValue, setFormValue] = useState({
-    email: "",
-    password: "",
-    name: "",
-  });
-
-  const { register, formState: { isValid, errors }  } = useForm({ mode: "onChange" });
+  const { register, handleSubmit, formState: { isValid, errors } } = useForm({ mode: "onChange" });
   const navigate = useNavigate()
+  const [errCode, setErrCode] = useState(null)
 
-  const handleSubmit = (e) => {
+
+  function onSubmit(data, e) {
     e.preventDefault();
-    createNewUser(formValue)
+    createNewUser(data)
       .then((res) => {
-        console.log(res);
         navigate('/signin', { replace: true });
       })
-      .catch((err) => console.log(err))
+      .catch((err) => setErrCode(err))
   };
 
   return (
     <section className="register section-register">
       <Logo />
       <h2 className="auth-title">Добро пожаловать!</h2>
-      <form className="register__form"  onSubmit={handleSubmit}>
+      <form className="register__form"  onSubmit={handleSubmit(onSubmit)}>
         <label className="register__label">
           Имя
           <input className="register__input auth-input" 
-          {...register("userName", {  
+          {...register("name", {  
             required: "Это поле обязательно для заполнения", 
             minLength: {
               value: 2, 
@@ -45,39 +41,30 @@ function Register() {
               value: /^[a-zA-Zа-яёА-ЯЁ][a-zA-Zа-яёА-ЯЁ\-\s]{1,30}$/,
               message: "Не допустимые символы",
             },
-            onChange: (e) => {
-              formValue.name = e.target.value;
-            }
             })} />
-          <span className="register__input-span">{errors.userName && errors.userName.message}</span>
+          <span className="register__input-span">{errors.name && errors.name.message}</span>
         </label>
         <label className="register__label">
           E-mail
           <input  className="register__input auth-input" 
-          {...register("userEmail", {  
+          {...register("email", {  
             required: "Это поле обязательно для заполнения",
             pattern: {
               value: /\S+@\S+\.\S+/,
               message: "Введите корректный адрес электронной почты",
             },
-            onChange: (e) => {
-              formValue.email = e.target.value
-            }
             })} />
-          <span className="register__input-span">{errors.userEmail && errors.userEmail.message}</span>
+          <span className="register__input-span">{errors.email && errors.email.message}</span>
         </label>
         <label className="register__label">
           Пароль
           <input type="password" className="register__input auth-input" 
-          {...register("userPassword", {  
+          {...register("password", {  
             required: "Это поле обязательно для заполнения", 
-            onChange: (e) => {
-              formValue.password = e.target.value
-            }
             })}/>
-          <span className="register__input-span">{errors.userPassword && errors.userPassword.message}</span>
+          <span className="register__input-span">{errors.password && errors.password.message}</span>
         </label>
-        <span className="regester__api-error-span">{}</span>
+        <Error errCode={errCode} />
         <ButtonSubmit text="Зарегистрироваться" disabled={!isValid} />
       </form>
       <p className="register__question">

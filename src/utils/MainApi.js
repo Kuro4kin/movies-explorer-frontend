@@ -36,12 +36,39 @@ export const login = (data) => {
   })
 }
 
-export const checkToken = () => {
+export const updateUserInfo = (data) => {
+  return fetch(`${BASE_URL}/users/me`, {
+    method: 'PATCH',
+    credentials: 'include',
+    headers: {
+      'Content-Type': 'application/json'
+    },
+    body: JSON.stringify(data)
+  })
+  .then((res) => {
+    return getResponseData(res)
+  })
+}
+
+export const checkUser = () => {
   return fetch(`${BASE_URL}/users/me`, {
     method: 'GET',
     credentials: 'include',
     headers: {
       'Content-Type': 'application/json',
+    },
+  })
+  .then((res) => {
+    return getResponseData(res)
+  })
+}
+
+export const unlogin = () => {
+  return fetch(`${BASE_URL}/signout`, {
+    method: 'DELETE',
+    credentials: 'include',
+    headers: {
+      'Content-Type': 'application/json'
     },
   })
   .then((res) => {
@@ -62,16 +89,31 @@ export const getMyMovies = () => {
   })
 }
 
+export const saveMovie = (data) => {
+  return fetch(`${BASE_URL}/movies`, {
+    method: 'POST',
+    credentials: 'include',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify(data)
+  })
+  .then((res) => {
+    return getResponseData(res)
+  })
+}
 
-export const unlogin = () => {
-  return fetch(`${BASE_URL}/signout`, {
+export const removeMovie = (movieId) => {
+  return fetch(`${BASE_URL}/movies/${movieId}`, {
     method: 'DELETE',
     credentials: 'include',
     headers: {
-      'Content-Type': 'application/json'
+      'Content-Type': 'application/json',
     },
   })
   .then((res) => {
     return getResponseData(res)
   })
 }
+
+
