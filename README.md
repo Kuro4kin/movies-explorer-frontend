@@ -15,5 +15,6 @@
 4. Микс классов для позиционирования блоков.
 6. Проект реализован с претензией на реализацию концепции PixelPerfect.
 
+[Ссылка на PR] (https://github.com/Kuro4kin/movies-explorer-frontend/pull/2#issue-1868084974)
 
 [Фронтенд-часть приложения, выложенная на сервер] (https://movies.kurochkin.nomoreparties.co/movies)
