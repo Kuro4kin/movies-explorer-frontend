@@ -31,7 +31,7 @@ function Register({ loggedIn, handleLogin }) {
           .catch((err) => setErrCode(err));
       })
       .catch((err) => setErrCode(err))
-      .finally(() => setIsFormDisabled(true));
+      .finally(() => setIsFormDisabled(false));
   }
 
   return (

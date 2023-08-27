@@ -29,7 +29,7 @@ function Login({ loggedIn, handleLogin }) {
         console.log(err);
         setErrCode(err);
       })
-      .finally(() => setIsFormDisabled(true));
+      .finally(() => setIsFormDisabled(false));
   }
 
   return (
