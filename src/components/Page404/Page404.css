@@ -23,8 +23,11 @@
   text-align: center;
 }
 
-.page404__link {
+.page404__button {
   margin: 0 0 59px 0;
+  border: none;
+  background-color: inherit;
+  padding: 0;
   color: #4285f4;
   font-size: 14px;
   font-weight: 400;
@@ -33,7 +36,7 @@
   transition: opacity 0.5s linear;
 }
 
-.page404__link:hover {
+.page404__button:hover {
   opacity: 80%;
 }
 
@@ -42,7 +45,7 @@
     padding: 412px 0 9px 0;
   }
 
-  .page404__link {
+  .page404__button {
     margin: 0 0 211px 0;
   }
 }
@@ -58,7 +61,7 @@
     font-size: 12px;
   }
 
-  .page404__link {
+  .page404__button {
     margin: 0 0 211px 0;
     font-size: 12px;
   }

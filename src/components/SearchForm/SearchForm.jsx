@@ -1,19 +1,29 @@
 import { useState } from "react";
 import { useForm } from "react-hook-form";
+import { useLocation } from "react-router-dom";
 
 import "./SearchForm.css";
 
-function SearchForm({ handleSubmitForm, keyWordValue, onlyShortFilmsValue }) {
+function SearchForm(props) {
+  const location = useLocation();
+  const [keyWordValue, setKeyWordValue] = useState(props.keyWordValue);
+  const [onlyShortFilmsValue, setOnlyShortFilmsValue] = useState(false);
+
   const {
     register,
     handleSubmit,
     formState: { errors },
-  } = useForm({ mode: "onChange", defaultValues: {keyWord: keyWordValue, onlyShortFilms: onlyShortFilmsValue}
+  } = useForm({ mode: "onChange",  defaultValues: {keyWord: keyWordValue, onlyShortFilms: onlyShortFilmsValue}
  });
 
   function onSubmit(data, evt) {
     evt.preventDefault();
-    handleSubmitForm(data);
+    console.log(keyWordValue, onlyShortFilmsValue);
+    props.handleSubmitForm(data.keyWord, data.onlyShortFilms);
+  }
+
+  function handleChangeCheckbox() {
+    props.handleChangeCheckBox(!onlyShortFilmsValue)
   }
 
   return (
@@ -22,7 +32,10 @@ function SearchForm({ handleSubmitForm, keyWordValue, onlyShortFilmsValue }) {
         <input
           className="search-form__input"
           placeholder="Фильм"
-          {...register("keyWord", { required: "Нужно ввести ключевое слово" })}
+          {...register("keyWord", { required: "Нужно ввести ключевое слово",
+           onChange: (e) => {
+            setKeyWordValue(e.target.value);
+          }})}
         />
         <button type="submit" className="search-form__button"></button>
       </div>
@@ -30,8 +43,12 @@ function SearchForm({ handleSubmitForm, keyWordValue, onlyShortFilmsValue }) {
       <label className="search-form__label-checkbox">
         <input 
           className="search-form__checkbox" 
-          type="checkbox" 
-          {...register("onlyShortFilms")}>
+          type="checkbox"
+          onClick={handleChangeCheckbox}
+          {...register("onlyShortFilms", {
+            onChange: (e) => {
+              setOnlyShortFilmsValue(!onlyShortFilmsValue);
+            }})}>
         </input>
         <span className="search-form__quasi-checkbox"></span>
         <span className="search-form__checkbox-subtitle">Короткометражки</span>

@@ -1,4 +1,4 @@
-import { useState } from "react";
+import {  useState } from "react";
 import Header from "../Header/Header";
 import Footer from "../Footer/Footer";
 import SearchForm from "../SearchForm/SearchForm";
@@ -29,7 +29,7 @@ function Movies(props) {
   const numberRenderCards = isScreenLg ? 12 : isScreenMd ? 8 : 5;
   const numberAddCards = isScreenLg ? 3 : 2; 
 
-  function handleSubmit({ keyWord, onlyShortFilms }) {
+  function handleSubmit(keyWord, onlyShortFilms) {
     setIsMovieNotFound(false);
     localStorage.setItem("keyWordValue", keyWord);
     localStorage.setItem("onlyShortFilms", onlyShortFilms);
@@ -59,6 +59,25 @@ function Movies(props) {
       .finally(() => {
         setIsPreloaderOpen(false);
       });
+  }
+
+  function handleChangeCheckBox(value) {
+    setIsMovieNotFound(false);
+    setStateShortFilmsCheckbox(value);
+    localStorage.setItem("onlyShortFilms", value)
+    const filterMovies = (moviesFilter(foundMovies, keyWordValue, value));
+    if (filterMovies) {
+      setRenderMovieCards(filterMovies.slice(0, numberRenderCards));
+      localStorage.setItem("renderMovies", JSON.stringify(filterMovies));
+      if (filterMovies.length === 0) {
+        setIsMovieNotFound(true);
+      }
+      if (filterMovies.length <= numberRenderCards) {
+        setStateButtonAdd(false);
+      } else {
+        setStateButtonAdd(true);
+      }
+    }
   }
 
   function showMoreMovies() {
@@ -91,6 +110,7 @@ function Movies(props) {
           handleSubmitForm={handleSubmit}
           keyWordValue={keyWordValue}
           onlyShortFilmsValue={stateShortFilmsCheckbox}
+          handleChangeCheckBox={handleChangeCheckBox}
         />
         <Preloader isPreloaderOpen={isPreloaderOpen} />
         {isMovieNotFound && <span className="movies__span">Ничего не найдено</span>}

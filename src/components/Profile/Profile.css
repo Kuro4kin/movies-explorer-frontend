@@ -91,6 +91,13 @@
   font-size: 11px;
 }
 
+.profile__update-message {
+  text-align: center;
+  color: #3DDC84;
+  font-weight: 400;
+  font-size: 11px;
+}
+
 .profile__button-edit {
   background-color: #202020;
   border: none;

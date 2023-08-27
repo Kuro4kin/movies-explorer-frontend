@@ -10,7 +10,7 @@ import { unlogin, updateUserInfo } from "../../utils/MainApi";
 import "./Profile.css";
 
 
-function Profile({ loggedIn, handleUnlogin, handleUpdateUserInfo }) {
+function Profile({ loggedIn, handleUnlogin, handleUpdateUserInfo, isUpdateDoneMessage }) {
   const currentUser = useContext(CurrentUserContext);
   const {
     register,
@@ -34,12 +34,10 @@ function Profile({ loggedIn, handleUnlogin, handleUpdateUserInfo }) {
   function onSubmit(data, e) {
     e.preventDefault();
     updateUserInfo(data)
-    .then((res) => {
-      handleUpdateUserInfo(res);
-      setIsEditability(false);
-    })
-    .catch((err) => setErrCode(err));
-
+      .then((res) => {
+        handleUpdateUserInfo(res);
+      })
+      .catch((err) => setErrCode(err))
   };
 
   function handleClickSignOutLink() {
@@ -66,7 +64,9 @@ function Profile({ loggedIn, handleUnlogin, handleUpdateUserInfo }) {
                 minLength: { value: 2, message: "Минимальное количество символов: 2" },
                 maxLength: 30,
                 pattern: { value: /^[a-zA-Zа-яёА-ЯЁ][a-zA-Zа-яёА-ЯЁ\-\s]{1,30}$/, message: "Не допустимые символы" 
-              }})}></input>
+                },
+                validate: (value) => value !== currentUser.name  || "Значение должно отличаться от имеющегося",
+              })}></input>
           </div>
           <span className="profile__input-span">{errors.name && errors.name.message}</span>
           <div className="profile__mail-container">
@@ -80,6 +80,7 @@ function Profile({ loggedIn, handleUnlogin, handleUpdateUserInfo }) {
                 pattern: {
                 value: /\S+@\S+\.\S+/,
                 message: "Введите корректный адрес электронной почты",
+                validate: (value) => value !== currentUser.email  || "Значение должно отличаться от имеющегося",
                },
               })}></input>
           </div>
@@ -90,13 +91,14 @@ function Profile({ loggedIn, handleUnlogin, handleUpdateUserInfo }) {
               <ButtonSubmit text="Сохранить" disabled={!isValid}/>
             </>
           )}
+          {isUpdateDoneMessage && (<span className="profile__update-message">Данные успешно обновлены</span>)}
         </form>
         {!isEditability && (
           <>
             <button className="profile__button-edit" onClick={handleClickEditButton}>
               Редактировать
             </button>
-            <Link className="profile__link-unlogin" to="/signin" onClick={handleClickSignOutLink}>
+            <Link className="profile__link-unlogin" to="/" onClick={handleClickSignOutLink}>
               Выйти из аккаунта
             </Link>
           </>

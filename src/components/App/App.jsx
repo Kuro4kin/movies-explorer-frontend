@@ -14,6 +14,7 @@ import "./App.css";
 
 function App() {
   const [loggedIn, setLoggedIn] = useState(false);
+  const [isUpdateDoneMessage, setIsUpdateDoneMessage] = useState(false);
   const [currentUser, setCurrentUser] = useState({});
   const [userMovies, setUserMovies] = useState([]);
   const [errCode, setErrCode] = useState(null)
@@ -66,6 +67,8 @@ function App() {
 
   function handleUpdateUserInfo(data) {
     setCurrentUser(data);
+    setIsUpdateDoneMessage(true);
+    setTimeout(setIsUpdateDoneMessage, 1500, false)
   }
 
   return (
@@ -108,12 +111,15 @@ function App() {
                       handleUnlogin={handleUnlogin}
                       handleUpdateUserInfo={handleUpdateUserInfo}
                       errCode={errCode}
+                      isUpdateDoneMessage={isUpdateDoneMessage}
                     />
                   )}
                 />
               }></Route>
-            <Route path="/signin" element={<Login handleLogin={handleLogin} />}></Route>
-            <Route path="/signup" element={<Register />}></Route>
+            <Route path="/signin" element={<Login loggedIn={loggedIn} handleLogin={handleLogin}/> }></Route>
+            <Route path="/signup" element={<Register loggedIn={loggedIn} handleLogin={handleLogin}/>}>
+    {/*           {loggedIn && <Navigate to="/movies" />} */}
+            </Route>
             <Route path="/*" element={<Page404 />}></Route>
           </Routes>
         </div>
