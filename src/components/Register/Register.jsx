@@ -28,9 +28,14 @@ function Register({ loggedIn, handleLogin }) {
             handleLogin();
             navigate("/movies", { replace: true });
           })
-          .catch((err) => setErrCode(err));
+          .catch((err) => {
+            console.log(err);
+            setErrCode(err);
+          })})
+      .catch((err) =>{
+        console.log(err);
+        setErrCode(err);
       })
-      .catch((err) => setErrCode(err))
       .finally(() => setIsFormDisabled(false));
   }
 

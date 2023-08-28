@@ -61,6 +61,7 @@ function App() {
     localStorage.removeItem("stateButtonAdd");
     localStorage.removeItem("filterMovies");
     localStorage.removeItem("onlyShortFilms");
+    localStorage.removeItem("stateOnlyShortSavedFilms");
     setLoggedIn(false);
     navigate("/");
   }
@@ -118,7 +119,6 @@ function App() {
               }></Route>
             <Route path="/signin" element={<Login loggedIn={loggedIn} handleLogin={handleLogin}/> }></Route>
             <Route path="/signup" element={<Register loggedIn={loggedIn} handleLogin={handleLogin}/>}>
-    {/*           {loggedIn && <Navigate to="/movies" />} */}
             </Route>
             <Route path="/*" element={<Page404 />}></Route>
           </Routes>

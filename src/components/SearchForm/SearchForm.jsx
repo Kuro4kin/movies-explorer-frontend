@@ -7,7 +7,7 @@ import "./SearchForm.css";
 function SearchForm(props) {
   const location = useLocation();
   const [keyWordValue, setKeyWordValue] = useState(props.keyWordValue);
-  const [onlyShortFilmsValue, setOnlyShortFilmsValue] = useState(false);
+  const [onlyShortFilmsValue, setOnlyShortFilmsValue] = useState(props.stateShortFilmsCheckbox);
 
   const {
     register,
@@ -37,7 +37,7 @@ function SearchForm(props) {
             setKeyWordValue(e.target.value);
           }})}
         />
-        <button type="submit" className="search-form__button"></button>
+        <button type="submit" className="search-form__button" disabled={props.IsSubmitButtonDisable}></button>
       </div>
       <span className="search-form__input-span">{errors.keyWord && errors.keyWord.message}</span>
       <label className="search-form__label-checkbox">

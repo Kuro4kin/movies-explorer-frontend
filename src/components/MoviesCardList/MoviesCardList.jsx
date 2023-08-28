@@ -34,12 +34,9 @@ function MoviesCardList(props) {
               />
             );
           })}
-        {location.pathname === "/saved-movies" &&
+        {(location.pathname === "/saved-movies") &&
           props.dataMovies.map((movie) => {
-            return <MoviesCard 
-            movie={movie}
-            handleRemoveSavedMovie={handleRemoveSavedMovie}
-            key={movie._id} />;
+            return <MoviesCard movie={movie} handleRemoveSavedMovie={handleRemoveSavedMovie} key={movie._id} />;
           })}
       </ul>
       {location.pathname === "/movies" && props.stateButtonAdd && (

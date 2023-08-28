@@ -1,4 +1,4 @@
-import {  useState } from "react";
+import { useState } from "react";
 import Header from "../Header/Header";
 import Footer from "../Footer/Footer";
 import SearchForm from "../SearchForm/SearchForm";
@@ -22,14 +22,16 @@ function Movies(props) {
   const [isPreloaderOpen, setIsPreloaderOpen] = useState(false);
   const [stateButtonAdd, setStateButtonAdd] = useState(JSON.parse(localStorage.getItem("stateButtonAdd")))
   const [isMovieNotFound, setIsMovieNotFound] = useState(false);
-
+  const [IsSubmitButtonDisable, setIsSubmitButtonDisable] = useState(false)
 
   const { isScreenLg, isScreenMd } = useResize();
 
   const numberRenderCards = isScreenLg ? 12 : isScreenMd ? 8 : 5;
-  const numberAddCards = isScreenLg ? 3 : 2; 
+  const numberAddCards = isScreenLg ? 3 : 2;
+
 
   function handleSubmit(keyWord, onlyShortFilms) {
+    setIsSubmitButtonDisable(true)
     setIsMovieNotFound(false);
     localStorage.setItem("keyWordValue", keyWord);
     localStorage.setItem("onlyShortFilms", onlyShortFilms);
@@ -58,24 +60,28 @@ function Movies(props) {
       })
       .finally(() => {
         setIsPreloaderOpen(false);
+        setIsSubmitButtonDisable(false)
       });
   }
 
   function handleChangeCheckBox(value) {
     setIsMovieNotFound(false);
+    setStateButtonAdd(true);
     setStateShortFilmsCheckbox(value);
     localStorage.setItem("onlyShortFilms", value)
     const filterMovies = (moviesFilter(foundMovies, keyWordValue, value));
     if (filterMovies) {
       setRenderMovieCards(filterMovies.slice(0, numberRenderCards));
-      localStorage.setItem("renderMovies", JSON.stringify(filterMovies));
+      localStorage.setItem("renderMovies", JSON.stringify(filterMovies.slice(0, numberRenderCards)));
       if (filterMovies.length === 0) {
         setIsMovieNotFound(true);
       }
       if (filterMovies.length <= numberRenderCards) {
         setStateButtonAdd(false);
+        localStorage.setItem("stateButtonAdd", false);
       } else {
         setStateButtonAdd(true);
+        localStorage.setItem("stateButtonAdd", true);
       }
     }
   }
@@ -109,8 +115,9 @@ function Movies(props) {
         <SearchForm
           handleSubmitForm={handleSubmit}
           keyWordValue={keyWordValue}
-          onlyShortFilmsValue={stateShortFilmsCheckbox}
+          stateShortFilmsCheckbox={stateShortFilmsCheckbox}
           handleChangeCheckBox={handleChangeCheckBox}
+          IsSubmitButtonDisable={IsSubmitButtonDisable}
         />
         <Preloader isPreloaderOpen={isPreloaderOpen} />
         {isMovieNotFound && <span className="movies__span">Ничего не найдено</span>}

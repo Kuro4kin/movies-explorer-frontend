@@ -19,6 +19,7 @@ function Profile({ loggedIn, handleUnlogin, handleUpdateUserInfo, isUpdateDoneMe
   } = useForm({ mode: "onChange", defaultValues: {name: currentUser.name, email: currentUser.email} });
 
   const [isEditability, setIsEditability] = useState(false);
+  const [IsSubmitButtonDisable, setIsSubmitButtonDisable] = useState(false)
   const [isNavigationOpen, setIsNavigationOpen] = useState(false);
   const [errCode, setErrCode] = useState(null)
 
@@ -32,12 +33,14 @@ function Profile({ loggedIn, handleUnlogin, handleUpdateUserInfo, isUpdateDoneMe
   };
 
   function onSubmit(data, e) {
+    setIsSubmitButtonDisable(true)
     e.preventDefault();
     updateUserInfo(data)
       .then((res) => {
         handleUpdateUserInfo(res);
       })
       .catch((err) => setErrCode(err))
+      .finally(() => setIsSubmitButtonDisable(false))
   };
 
   function handleClickSignOutLink() {
@@ -88,7 +91,7 @@ function Profile({ loggedIn, handleUnlogin, handleUpdateUserInfo, isUpdateDoneMe
           {isEditability && (
             <>
               <Error errCode={errCode}/>
-              <ButtonSubmit text="Сохранить" disabled={!isValid}/>
+              <ButtonSubmit text="Сохранить" disabled={!isValid || IsSubmitButtonDisable}/>
             </>
           )}
           {isUpdateDoneMessage && (<span className="profile__update-message">Данные успешно обновлены</span>)}
