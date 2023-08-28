@@ -12,9 +12,16 @@
   box-shadow: 0 4px 10px rgba(0, 0, 0, 0.08);
 }
 
+.movie-card__link-wrapper {
+  margin: 0;
+  padding: 0;
+  width: 100%;
+  text-decoration: none;
+  color: inherit;
+}
+
 .movie-card__container {
-  margin-top: 10px;
-  margin-bottom: 10px;
+  margin: 10px auto 10px auto;
   display: flex;
   flex-direction: row;
   justify-content: space-between;
@@ -25,6 +32,7 @@
 .movie-card__image {
   display: block;
   width: 100%;
+  height: 203px;
   overflow: hidden;
   object-fit: cover;
   border-top-left-radius: 6px;
@@ -111,6 +119,10 @@
     margin-top: 8px;
     width: calc(100% - 29px);
   }
+  
+  .movie-card__image {
+    height: 190px;
+  }
 }
 
 @media (max-width: 400px) {
@@ -129,5 +141,9 @@
 
   .movie-card__subtitle {
     padding-left: 12px;
+  }
+
+  .movie-card__image {
+    height: 168px;
   }
 }

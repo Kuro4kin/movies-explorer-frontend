@@ -13,7 +13,7 @@ import "./Main.css";
 function Main(props) {
   const [isNavigationOpen, setIsNavigationOpen] = useState(false);
 
-  const toggleNavigation = () => {
+  function toggleNavigation() {
     setIsNavigationOpen(!isNavigationOpen);
   };
 

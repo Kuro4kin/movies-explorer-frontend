@@ -15,6 +15,16 @@
   background-color: rgb(52, 86, 243, 0.8);
 }
 
+.button-submit:disabled {
+  background-color: #f8f8f8;
+  color: #000;
+  transition: opacity 0.5s linear;
+}
+
+.button-submit:disabled:hover {
+  opacity: 80%;
+}
+
 @media (max-width: 400px) {
   .button-submit {
     height: 45px;

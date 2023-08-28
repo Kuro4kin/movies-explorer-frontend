@@ -1,35 +1,68 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 import Header from "../Header/Header";
 import Footer from "../Footer/Footer";
 import SearchForm from "../SearchForm/SearchForm";
-import Preloader from "../Preloader/Preloader"
-import MoviesCardList from "../MoviesCardList/MoviesCardList"
+import Preloader from "../Preloader/Preloader";
+import MoviesCardList from "../MoviesCardList/MoviesCardList";
 import Navigation from "../Navigation/Navigation";
-
+import { moviesFilter } from "../../utils/MoviesFilter";
 
 import "./SavedMovies.css";
 
 function SavedMovies(props) {
+  const [stateShortFilmsCheckbox, setStateShortFilmsCheckbox] = useState(
+    JSON.parse(localStorage.getItem("stateOnlyShortSavedFilms"))
+  );
+  const [keyWordValue, setKeyWordValue] = useState("");
+  const [foundMovieCards, setFoundMovieCards] = useState(props.dataMovies);
   const [isNavigationOpen, setIsNavigationOpen] = useState(false);
-  const [isPreloaderOpen, setIsPreloaderOpen] = useState(false);
-  
-  const toggleNavigation = () => {
-    setIsNavigationOpen(!isNavigationOpen)
+
+  function handleSubmitForm(keyWord, onlyShortFilms) {
+    setKeyWordValue(keyWord);
+    setStateShortFilmsCheckbox(onlyShortFilms);
+    setFoundMovieCards(moviesFilter(props.dataMovies, keyWord, onlyShortFilms));
   }
 
-  
-  return(
+  function handleRemoveSavedMovie(movieId) {
+    props.handleRemoveSavedMovie(movieId);
+  }
+
+  function toggleNavigation() {
+    setIsNavigationOpen(!isNavigationOpen);
+  }
+
+  function handleChangeCheckBox(value) {
+    setStateShortFilmsCheckbox(value);
+    localStorage.setItem("stateOnlyShortSavedFilms", value);
+  }
+
+  return (
     <>
-      <Header loggedIn={props.loggedIn} openNavigation={toggleNavigation}/> 
+      <Header loggedIn={props.loggedIn} openNavigation={toggleNavigation} />
       <main className="saved-movies">
-        <SearchForm />
-        <MoviesCardList dataMovies={props.dataMovies} user={props.user} />
+        <SearchForm
+          handleSubmitForm={handleSubmitForm}
+          stateShortFilmsCheckbox={stateShortFilmsCheckbox}
+          handleChangeCheckBox={handleChangeCheckBox}
+        />
+        <MoviesCardList
+          dataMovies={
+            stateShortFilmsCheckbox
+              ? moviesFilter(foundMovieCards, keyWordValue, stateShortFilmsCheckbox)
+              : foundMovieCards
+          }
+          handleRemoveSavedMovie={handleRemoveSavedMovie}
+        />
       </main>
-      <Navigation isNavigationOpen={isNavigationOpen} setIsNavigationOpen={setIsNavigationOpen} closeNavigation={toggleNavigation}/>
+      <Navigation
+        isNavigationOpen={isNavigationOpen}
+        setIsNavigationOpen={setIsNavigationOpen}
+        closeNavigation={toggleNavigation}
+      />
       <Footer />
     </>
-  )
+  );
 }
 
 export default SavedMovies;

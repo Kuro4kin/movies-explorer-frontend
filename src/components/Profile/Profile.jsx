@@ -1,59 +1,109 @@
-import { useState } from "react";
+import { useState, useContext } from "react";
 import { Link } from "react-router-dom";
+import { useForm } from "react-hook-form";
 import Header from "../Header/Header";
 import Navigation from "../Navigation/Navigation";
+import Error from "../Error/Error";
 import ButtonSubmit from "../ButtonSubmit/ButtonSubmit";
-
+import { CurrentUserContext } from "../../contexts/CurrentUserContext";
+import { unlogin, updateUserInfo } from "../../utils/MainApi";
 import "./Profile.css";
 
-function Profile({ loggedIn, user }) {
-  const [isEditability, setIsEditability] = useState(false);
-  const [isNavigationOpen, setIsNavigationOpen] = useState(false);
 
-  const toggleNavigation = () => {
+function Profile({ loggedIn, handleUnlogin, handleUpdateUserInfo, isUpdateDoneMessage }) {
+  const currentUser = useContext(CurrentUserContext);
+  const {
+    register,
+    handleSubmit,
+    formState: { isValid, errors },
+  } = useForm({ mode: "onChange", defaultValues: {name: currentUser.name, email: currentUser.email} });
+
+  const [isEditability, setIsEditability] = useState(false);
+  const [IsSubmitButtonDisable, setIsSubmitButtonDisable] = useState(false)
+  const [isNavigationOpen, setIsNavigationOpen] = useState(false);
+  const [errCode, setErrCode] = useState(null)
+
+
+  function toggleNavigation() {
     setIsNavigationOpen(!isNavigationOpen);
   };
 
-  const handleClickEditButton = () => {
+  function handleClickEditButton() {
     setIsEditability(true);
   };
 
-  const onClickButtonSave = () => {
-    setIsEditability(false);
+  function onSubmit(data, e) {
+    setIsSubmitButtonDisable(true)
+    e.preventDefault();
+    updateUserInfo(data)
+      .then((res) => {
+        handleUpdateUserInfo(res);
+      })
+      .catch((err) => setErrCode(err))
+      .finally(() => setIsSubmitButtonDisable(false))
   };
+
+  function handleClickSignOutLink() {
+    unlogin()
+      .then(() => {
+        handleUnlogin();
+      })
+      .catch((err) => console.log(err))
+  }
 
   return (
     <>
       <Header loggedIn={loggedIn} openNavigation={toggleNavigation} />
       <main className="profile">
-        <h2 className="profile__title">Привет, {user.name}!</h2>
-        <form className="profile__form">
+        <h2 className="profile__title">Привет, {currentUser.name}!</h2>
+        <form className="profile__form" onSubmit={handleSubmit(onSubmit)}>
           <div className="profile__name-container">
             <p className="profile__note">Имя</p>
-            <input required disabled={!isEditability} className="profile__input" placeholder={user.name}></input>
+            <input
+              disabled={!isEditability}
+              className="profile__input"
+              {...register("name", {
+                required: "Это поле обязательно для заполнения",
+                minLength: { value: 2, message: "Минимальное количество символов: 2" },
+                maxLength: 30,
+                pattern: { value: /^[a-zA-Zа-яёА-ЯЁ][a-zA-Zа-яёА-ЯЁ\-\s]{1,30}$/, message: "Не допустимые символы" 
+                },
+                validate: (value) => value !== currentUser.name  || "Значение должно отличаться от имеющегося",
+              })}></input>
           </div>
+          <span className="profile__input-span">{errors.name && errors.name.message}</span>
           <div className="profile__mail-container">
             <p className="profile__note">E-mail</p>
-            <input
-              required
-              disabled={!isEditability}
-              type="mail"
-              className="profile__input"
-              placeholder={user.mail}></input>
+            <input 
+              disabled={!isEditability} 
+              type="mail" 
+              className="profile__input" 
+              {...register("email", {
+                required: "Это поле обязательно для заполнения",
+                pattern: {
+                value: /\S+@\S+\.\S+/,
+                message: "Введите корректный адрес электронной почты",
+                validate: (value) => value !== currentUser.email  || "Значение должно отличаться от имеющегося",
+               },
+              })}></input>
           </div>
+          <span className="profile__input-span">{errors.email && errors.email.message}</span>
           {isEditability && (
             <>
-              <span className="profile__span-error"></span>
-              <ButtonSubmit text="Сохранить" onClickButtonSave={onClickButtonSave} />
+              <Error errCode={errCode}/>
+              <ButtonSubmit text="Сохранить" disabled={!isValid || IsSubmitButtonDisable}/>
             </>
           )}
+          {isUpdateDoneMessage && (<span className="profile__update-message">Данные успешно обновлены</span>)}
         </form>
         {!isEditability && (
           <>
             <button className="profile__button-edit" onClick={handleClickEditButton}>
               Редактировать
             </button>
-            <Link className="profile__link-unlogin" to="/signin">Выйти из аккаунта</Link>
+            <Link className="profile__link-unlogin" to="/" onClick={handleClickSignOutLink}>
+              Выйти из аккаунта
+            </Link>
           </>
         )}
       </main>
